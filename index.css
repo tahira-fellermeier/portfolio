@@ -1,23 +1,9 @@
 /* --------------------------------------- */
-/* ----- Basic Setup & Reset ----- */
+/* ----- 1. Reset & Global Styles ----- */
 /* --------------------------------------- */
 
-@font-face {
-    font-family: 'Hk Grotesk';
-    font-style: normal;
-    font-weight: 400;
-    src: url('./fonts/HKGrotesk-Regular.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Jost';
-    font-style: normal;
-    font-weight: 400;
-    src: url('./fonts/Jost-Regular.ttf') format('woff');
-}
-
-/* Force border-box on everything for easier sizing */
-*, *::before, *::after {
+/* The '*' selector ensures padding doesn't push elements past the screen edge */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box; 
@@ -26,6 +12,7 @@
 html {
     font-size: 62.5%; /* 1rem = 10px */
     scroll-behavior: smooth;
+    overflow-x: hidden; /* Safety net against horizontal scrolling */
 }
 
 :root {
@@ -45,13 +32,7 @@ html {
     --white: #f0e9f2;
     --white-1: #e5e5e6da;
 
-    --container-max-width: 1180px;
-    --gutter-huge: 12rem;
-    --gutter-medium: 6rem;
-    --gutter-normal: 3rem;
-    --gutter-small: 2rem;
-
-    --border-light: 1px solid rgb(36, 35, 35);
+    --container-max-width: 1100px;
 }
 
 body {
@@ -64,27 +45,29 @@ body {
 }
 
 /* --------------------------------------- */
-/* ----- Layout Containers ----- */
+/* ----- 2. Layout Containers ----- */
 /* --------------------------------------- */
 
 .row {
     max-width: var(--container-max-width);
     margin: 0 auto;
-    padding: 0 var(--gutter-medium);
+    padding: 0 5%; /* Flexible side spacing */
+    width: 100%;
 }
 
 section {
-    padding: var(--gutter-huge) 0;
-    border-bottom: var(--border-light);
+    padding: 10rem 0;
+    border-bottom: 1px solid rgb(36, 35, 35);
 }
 
 img {
-    max-width: 100%;
-    display: block; /* Removes bottom spacing */
+    max-width: 100%; /* Prevents images from going over the edge */
+    height: auto;
+    display: block;
 }
 
 /* --------------------------------------- */
-/* ----- Typography ----- */
+/* ----- 3. Typography ----- */
 /* --------------------------------------- */
 
 h1, h2, h3 {
@@ -94,44 +77,45 @@ h1, h2, h3 {
 }
 
 h2 {
-    font-size: clamp(3rem, 4vw, var(--font-size-large));
-    margin-bottom: var(--gutter-medium);
+    font-size: clamp(3rem, 5vw, var(--font-size-large));
+    margin-bottom: 4rem;
 }
 
 h2::after {
     content: '';
     display: block;
     height: 2px;
-    width: 10rem;
+    width: 8rem;
     background: var(--pink);
-    margin-top: var(--gutter-small);
+    margin-top: 1.5rem;
 }
 
 p {
     margin-bottom: 2rem;
+    max-width: 60rem; /* Prevents lines from being too long to read */
 }
 
 /* --------------------------------------- */
-/* ----- Navigation ----- */
+/* ----- 4. Navigation ----- */
 /* --------------------------------------- */
 
 .nav {
     display: flex;
     justify-content: flex-end;
-    padding: var(--gutter-normal) 2rem;
+    padding: 3rem 0;
 }
 
 .nav__items {
     display: flex;
     list-style: none;
-    gap: var(--gutter-medium);
+    gap: 4rem;
 }
 
 .nav__link {
     text-decoration: none;
     color: inherit;
     font-family: 'Jost', sans-serif;
-    transition: color 0.2s;
+    transition: 0.2s;
 }
 
 .nav__link:hover {
@@ -139,77 +123,103 @@ p {
 }
 
 /* --------------------------------------- */
-/* ----- Skills Grid (Fixed) ----- */
+/* ----- 5. Header / Hero ----- */
+/* --------------------------------------- */
+
+.header {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('./images/header.jpg') center/cover no-repeat fixed;
+    height: 100vh;
+    display: flex;
+    align-items: center; /* Vertically centers the text */
+}
+
+.header__text {
+    max-width: 70rem;
+}
+
+.header__text p {
+    font-size: var(--font-size-medium);
+    margin: 2rem 0 4rem;
+}
+
+/* --------------------------------------- */
+/* ----- 6. Work & About (Responsive) ----- */
+/* --------------------------------------- */
+
+.work__box, .about__content {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to stack on small screens */
+    gap: 5rem;
+    align-items: center;
+    margin-bottom: 8rem;
+}
+
+.work__text, .work__image-box, 
+.about__text, .about__photo-container {
+    flex: 1 1 40rem; /* Grow, shrink, and basis of 400px */
+}
+
+.about__content {
+    flex-direction: row-reverse; /* Keeps photo on right on desktop */
+}
+
+/* --------------------------------------- */
+/* ----- 7. Skills Grid ----- */
 /* --------------------------------------- */
 
 .skills__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 3rem;
-    margin-top: 2rem;
+    /* Automatically fits as many icons as possible in a row */
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 4rem;
+    margin-top: 4rem;
 }
 
 .skill {
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .skill img {
-    width: 5rem;
-    height: 5rem;
-    margin-bottom: 1rem;
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto 1rem;
 }
 
 /* --------------------------------------- */
-/* ----- Work / Portfolio ----- */
+/* ----- 8. Mobile Adjustments ----- */
 /* --------------------------------------- */
 
-.work__box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4rem;
-    margin-bottom: var(--gutter-huge);
-}
-
-.work__text, .work__image-box {
-    flex: 1 1 450px; /* Allows them to stack on small screens */
-}
-
-/* --------------------------------------- */
-/* ----- About Section ----- */
-/* --------------------------------------- */
-
-.about__content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--gutter-medium);
-}
-
-.about__text {
-    flex: 1 1 400px;
-}
-
-.about__photo-container {
-    flex: 1 1 300px;
-}
-
-/* --------------------------------------- */
-/* ----- Responsive Adjustments ----- */
-/* --------------------------------------- */
-
-@media(max-width: 768px) {
-    .row {
-        padding: 0 var(--gutter-small);
-    }
-    
-    .nav__items {
-        gap: var(--gutter-small);
+@media (max-width: 768px) {
+    html {
+        font-size: 55%; /* Shrinks all rem-based sizes for mobile */
     }
 
     section {
-        padding: var(--gutter-medium) 0;
+        padding: 6rem 0;
+    }
+
+    .nav {
+        justify-content: center;
+    }
+
+    .nav__items {
+        gap: 2rem;
+    }
+
+    .header {
+        text-align: center;
+    }
+
+    .header__text {
+        margin: 0 auto;
+    }
+
+    .about__content {
+        flex-direction: column-reverse; /* Stacks photo on top of text on mobile */
+    }
+
+    h2::after {
+        margin: 1.5rem auto 0; /* Centers the pink line */
     }
 }
